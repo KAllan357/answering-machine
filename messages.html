@@ -1,0 +1,38 @@
+<html>
+<head><title>Answering Machine</title></head>
+<script type="text/javascript">
+function reload() {
+  window.location.reload();
+}
+window.setTimeout(reload, 5000);
+</script>
+<style type="text/css">
+body {
+  font-family: sans-serif;
+}
+table {
+  font-size: 3em;
+  border-spacing: 2px;
+  width: 30em;
+  margin: 0 auto;
+}
+th {
+  text-align: left;
+}
+</style>
+<body>
+  <h1>{{ .Name }}'s answering machine</h1>
+  <table>
+    <tr>
+      <th>From</th>
+      <th>Body</th>
+    </tr>
+  {{range .Messages}}
+  <tr>
+    <td>{{ .From }}</td>
+    <td>{{ .Body }}</td>
+  </tr>
+  {{end}}
+</table>
+</body>
+</html>
