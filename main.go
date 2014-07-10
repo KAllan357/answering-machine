@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"os"
 	"text/template"
 )
 
@@ -15,12 +17,18 @@ type Message struct {
 	Body string `json:"body"`
 }
 
-func main() {
-	http.HandleFunc("/messages", messagesHandler)
-	http.ListenAndServe(":8080", nil)
+// Credit to this! https://groups.google.com/forum/#!topic/golang-nuts/s7Xk1q0LSU0
+func Log(handler http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("%s %s %s", r.RemoteAddr, r.Method, r.URL)
+		handler.ServeHTTP(w, r)
+	})
 }
 
-//todo add the ENV variable for the user's name. Default to Docker
+func main() {
+	http.HandleFunc("/messages", messagesHandler)
+	http.ListenAndServe(":8080", Log(http.DefaultServeMux))
+}
 
 func messagesHandler(w http.ResponseWriter, r *http.Request) {
 
@@ -38,8 +46,13 @@ func messagesHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, message)
 	} else if method == "GET" {
 		// view some messages
+		name := os.Getenv("ANSWERING_MACHINE_OWNER")
+		if name == "" {
+			name = "Docker"
+		}
+
 		t, _ := template.ParseFiles("messages.html")
-		t.Execute(w, map[string]interface{}{"Messages": messages})
+		t.Execute(w, map[string]interface{}{"Messages": messages, "Name": name})
 	} else {
 		// youre a bad boy
 	}
