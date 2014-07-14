@@ -17,6 +17,11 @@ type Message struct {
 	Body string `json:"body"`
 }
 
+type Template struct {
+	Messages []Message
+	Name     string
+}
+
 // Credit to this! https://groups.google.com/forum/#!topic/golang-nuts/s7Xk1q0LSU0
 func Log(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -52,7 +57,8 @@ func messagesHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		t, _ := template.ParseFiles("messages.html")
-		t.Execute(w, map[string]interface{}{"Messages": messages, "Name": name})
+		context := &Template{Messages: messages, Name: name}
+		t.Execute(w, context)
 	} else {
 		// youre a bad boy
 	}
