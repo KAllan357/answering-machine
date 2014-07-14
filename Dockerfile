@@ -7,8 +7,6 @@ RUN mkdir /app
 ADD main.go /app/
 ADD messages.html /app/
 
-# EXPOSE 8080
-
 WORKDIR /app
 RUN /usr/local/go/bin/go build /app/main.go
 RUN chmod +x main
