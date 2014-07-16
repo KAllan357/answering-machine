@@ -40,8 +40,8 @@ posted a message on a running Answering Machine.
 
 ## Exercise 1 - Fixing and running the Telephone Application
 
-1. Clone the Telephone Github repository - `git clone https://github.com/KAllan357/telephone.git`
-2. Install [Git](http://sourceforge.net/projects/git-osx-installer/)
+1. Install [Git](http://sourceforge.net/projects/git-osx-installer/)
+2. Clone the Telephone Github repository - `git clone https://github.com/KAllan357/telephone.git`
 3. Let's complete the application:
 4. Fix the Dockerfile according to the comments.
 5. Address the FIXME's in the `telephone.rb`.
