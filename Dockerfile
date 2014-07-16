@@ -11,4 +11,5 @@ WORKDIR /app
 RUN /usr/local/go/bin/go build /app/main.go
 RUN chmod +x main
 
+EXPOSE 8080
 CMD "/app/main"

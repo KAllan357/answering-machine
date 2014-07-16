@@ -64,18 +64,18 @@ By now, you have successfully POSTed a message to the presenter's running Answer
 
 1. Clone the Answering Machine Github repository `git clone https://github.com/KAllan357/answering-machine.git`
 2. Build and start a container running the Answering Machine application.
-3. Try curling the Answering Machine. Does it work on localhost? Does it work on the container's IP? (`docker inspect --format '{{ .NetworkSettings.IPAddress }}' <container id>`)
+3. Try curling the Answering Machine. Does it work on localhost? Does it work on the container's IP? (`docker inspect --format '{{ .NetworkSettings.IPAddress }}' <container id>`). Don't forget to add a forwarding rule to VirtualBox!
 4. Edit the Answering Machine's Dockerfile, rebuild it and learn how to EXPOSE a port.
-5. Learn how to forward a port with the docker run's `-p` flag. Does curling work now?
+5. Learn how to forward a port with the docker run's `-p` flag. Does curling work now? `docker run -d -p 8080:8080 <container id>`
 6. The basic Answering Machine is "Docker's" - you want this to be YOUR answering machine! Notice that [the code](https://github.com/KAllan357/answering-machine/blob/master/main.go#L54) lets us know that an environment variable is exposed!
-7. Learn how to pass an environment variable through docker run's `-e` flag. Who's Answering Machine is it now?
+7. Learn how to pass an environment variable through docker run's `-e` flag. Who's Answering Machine is it now? `docker run -d -p 8080:8080 -e ANSWERING_MACHINE_OWNER="Kyle" <container id>`
 
 ## Exercise 2 - An Advanced Answering Machine
 
 Next, we want to Link our own Answering Machine to our own Telephone.
 
-1. Run your Answering Machine container with a `--name` flag.
-2. Next, you'll want to run your Telephone application with the `--link` flag, linking the container name you used in step 1 to what your telephone.rb tries to connect to.
+1. Run your Answering Machine container with a `--name` flag. `docker run -d -p 8080:8080 -e ANSWERING_MACHINE_OWNER="Kyle" --name answering-machine <answering machine>`
+2. Next, you'll want to run your Telephone application with the `--link` flag, linking the container name you used in step 1 to what your telephone.rb tries to connect to. `docker run -d --link answering-machine:answering-machine <telephone>`
 3. Finally, check out what the `docker logs <container>` gives you for your Answering Machine application.
 
 ## Exercise 2 - Key Takeaways
