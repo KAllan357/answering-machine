@@ -22,6 +22,12 @@ type Template struct {
 	Name     string
 }
 
+type Config struct {
+	Name string `json:"name"`
+}
+
+var config = &Config{}
+
 // Credit to this! https://groups.google.com/forum/#!topic/golang-nuts/s7Xk1q0LSU0
 func Log(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -31,6 +37,15 @@ func Log(handler http.Handler) http.Handler {
 }
 
 func main() {
+	configFile, err := os.Open("config.json")
+	if err != nil {
+		panic(err)
+	}
+	err = json.NewDecoder(configFile).Decode(config)
+	if err != nil {
+		panic(err)
+	}
+
 	http.HandleFunc("/messages", messagesHandler)
 	http.ListenAndServe(":8080", Log(http.DefaultServeMux))
 }
@@ -51,7 +66,7 @@ func messagesHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, message)
 	} else if method == "GET" {
 		// view some messages
-		name := os.Getenv("ANSWERING_MACHINE_OWNER")
+		name := config.Name
 		if name == "" {
 			name = "Docker"
 		}
